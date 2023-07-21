@@ -1,14 +1,14 @@
 package com.apnidukan.dto;
 
-public class ProductDto {
+public class ProductDTO {
 
     private Long id;
     private String title;
 
-    public ProductDto() {
+    public ProductDTO() {
     }
 
-    public ProductDto(Long id, String title) {
+    public ProductDTO(Long id, String title) {
         this.id = id;
         this.title = title;
     }
@@ -17,7 +17,7 @@ public class ProductDto {
         return id;
     }
 
-    public ProductDto setId(Long id) {
+    public ProductDTO setId(Long id) {
         this.id = id;
         return this;
     }
@@ -26,7 +26,7 @@ public class ProductDto {
         return title;
     }
 
-    public ProductDto setTitle(String title) {
+    public ProductDTO setTitle(String title) {
         this.title = title;
         return this;
     }
