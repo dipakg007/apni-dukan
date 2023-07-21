@@ -1,7 +1,6 @@
 package com.apnidukan.dto;
 
 public class ProductDTO {
-
     private Long id;
     private String title;
 

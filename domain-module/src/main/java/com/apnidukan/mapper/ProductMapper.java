@@ -12,6 +12,7 @@ public class ProductMapper {
         return product;
     }
 
+
     public static ProductDTO toDto(Product product){
         ProductDTO productDto = new ProductDTO();
         productDto.setId(product.getId());
