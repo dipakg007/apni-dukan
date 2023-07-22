@@ -1,5 +1,6 @@
 package com.apnidukan.controllers;
 
+import com.apnidukan.Service.IProductService;
 import com.apnidukan.dto.ProductDTO;
 import com.apnidukan.entity.Product;
 import com.apnidukan.mapper.ProductMapper;
@@ -18,16 +19,18 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private IProductService productService;
+
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getAllProduct(){
-        List<Product> products = productRepository.findAll();
-        return ResponseEntity.ok(products.stream().map(ProductMapper::toDto).toList());
+        List<ProductDTO> products = productService.getAllProduct();
+        return ResponseEntity.ok(products);
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDto){
-        Product product = ProductMapper.toEntity(productDto);
-        ProductDTO savedProduct = ProductMapper.toDto(productRepository.save(product));
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO){
+        ProductDTO savedProduct = productService.createProduct(productDTO);
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 }
