@@ -17,8 +17,7 @@ jobs:
       run: |
         PR_NUMBER=$(jq --raw-output .number "$GITHUB_EVENT_PATH")
         REVIEWERS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-          "https://api.github.com/apni-dukan/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/requested_reviewers" | jq --raw-output '.users')
-
+          "https://api.github.com/repos/apni-dukan/pulls/${PR_NUMBER}/requested_reviewers" | jq --raw-output '.users')
         if [ "$(echo "$REVIEWERS" | jq length)" -gt 0 ]; then
           echo "Reviewers are added to the pull request."
         else
