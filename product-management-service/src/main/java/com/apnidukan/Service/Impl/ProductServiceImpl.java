@@ -29,13 +29,4 @@ public class ProductServiceImpl implements IProductService {
         List<Product> product = productRepository.findAll();
         return product.stream().map(ProductMapper::toDto).toList();
     }
-
-    @Override
-    public ProductDTO createProduct(ProductDTO productDTO) {
-        LOGGER.info("@@@@ ProductServiceImpl: In method createProduct to create new product");
-        Product product = ProductMapper.toEntity(productDTO);
-        ProductDTO savedProductDTO = ProductMapper.toDto(productRepository.save(product));
-        LOGGER.info("@@@@ ProductServiceImpl: Created product-> {}", productMapper.mapForLogging(savedProductDTO));
-        return savedProductDTO;
-    }
 }
