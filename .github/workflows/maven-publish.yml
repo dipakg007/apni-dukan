@@ -17,9 +17,9 @@ jobs:
       run: |
         PR_NUMBER=$(jq --raw-output .number "$GITHUB_EVENT_PATH")
         REVIEWERS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-          "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/requested_reviewers" | jq --raw-output '.users[].login')
+          "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/requested_reviewers" | jq --raw-output '.users')
 
-        if [ -n "$REVIEWERS" ]; then
+        if [ "$REVIEWERS" != "null" ] && [ -n "$REVIEWERS" ]; then
           echo "Reviewers are added to the pull request."
         else
           echo "No reviewers are added to the pull request."
