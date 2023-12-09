@@ -5,6 +5,8 @@ name: Maven Package
 
 on:
   pull_request:
+    types:
+      - synchronize
     
 jobs:
   build:
