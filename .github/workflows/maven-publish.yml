@@ -13,17 +13,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check Reviewer
+    - name: List reviews on the pull request
+      shell: bash
       run: |
-        PR_NUMBER=$(jq --raw-output .number "$GITHUB_EVENT_PATH")
-        REVIEWERS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-          "https://api.github.com/repos/apni-dukan/pulls/${PR_NUMBER}/requested_reviewers" | jq --raw-output '.users')
-        if [ "$(echo "$REVIEWERS" | jq length)" -gt 0 ]; then
-          echo "Reviewers are added to the pull request."
-        else
-          echo "No reviewers are added to the pull request."
-          exit 1
-        fi
+        token=${{ secrets.GITHUB_TOKEN }}
+        base64AuthInfo='$token | base64 -e'
+        response=$(curl --request GET \
+        --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews \
+        --header 'Authorization: $base64AuthInfo' \
+        --header 'Content-Type: application/json')
+        echo $response
+        echo $response | jq '.[] | select(.state=="APPROVED")'
+        
     - name: Checkout Repository
       uses: actions/checkout@v2
 
