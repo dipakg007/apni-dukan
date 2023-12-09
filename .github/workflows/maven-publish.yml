@@ -13,12 +13,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: List reviews on the pull request
+    - name: Check For Reviewers
       run: |
         PR_NUMBER=$(echo "${{ github.event.number }}")
-        REVIEWS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}/reviews")
-        echo "$REVIEWS"
+        REVIEWERS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          "https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}")
+        NUM_REVIEWERS=$(echo "$REVIEWERS" | jq '.requested_reviewers | length')
+        echo "Number of Reviewers: $NUM_REVIEWERS"
+        if [ "$NUM_REVIEWERS" -eq 0 ]; then
+          echo "No reviewers found. Failing the job."
+          exit 1
+        else
+          echo "Reviewers found. Proceeding with the job."
+        fi
         
     - name: Checkout Repository
       uses: actions/checkout@v2
