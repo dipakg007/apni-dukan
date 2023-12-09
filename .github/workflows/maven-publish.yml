@@ -15,15 +15,14 @@ jobs:
     steps:
     - name: Check Reviewer
       run: |
-        REVIEWER_NAME="your-reviewer-username"
         PR_NUMBER=$(jq --raw-output .number "$GITHUB_EVENT_PATH")
         REVIEWERS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
           "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/requested_reviewers" | jq --raw-output '.users[].login')
 
-        if echo "$REVIEWERS" | grep -q "$REVIEWER_NAME"; then
-          echo "Reviewer $REVIEWER_NAME is added to the pull request."
+        if [ -n "$REVIEWERS" ]; then
+          echo "Reviewers are added to the pull request."
         else
-          echo "Reviewer $REVIEWER_NAME is not added to the pull request."
+          echo "No reviewers are added to the pull request."
           exit 1
         fi
         
