@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/api/product")
 public class ProductController {
 
+    //This controller deals with the Get Api calls for the product
 
     @Autowired
     private ProductRepository productRepository;
@@ -25,11 +26,5 @@ public class ProductController {
     public ResponseEntity<List<ProductDTO>> getAllProduct(){
         List<ProductDTO> products = productService.getAllProduct();
         return ResponseEntity.ok(products);
-    }
-
-    @PostMapping
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO){
-        ProductDTO savedProduct = productService.createProduct(productDTO);
-        return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 }
