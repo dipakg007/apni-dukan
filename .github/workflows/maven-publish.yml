@@ -1,0 +1,41 @@
+# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
+# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
+
+name: Maven Package
+
+on:
+  pull_request:
+    types:
+      - synchronize
+  pull_request_review:
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check For Reviewers
+      run: |
+        PR_NUMBER=$(echo "${{ github.event.number }}")
+        REVIEWERS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          "https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}")
+        NUM_REVIEWERS=$(echo "$REVIEWERS" | jq '.requested_reviewers | length')
+        echo "Number of Reviewers: $NUM_REVIEWERS"
+        if [ "$NUM_REVIEWERS" -eq 0 ]; then
+          echo "No reviewers found. Failing the job."
+          exit 1
+        else
+          echo "Reviewers found. Proceeding with the job."
+        fi
+        
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '17'
+
+    - name: Build with Maven
+      run: mvn -B clean install

@@ -2,8 +2,6 @@ package com.apnidukan.controllers;
 
 import com.apnidukan.Service.IProductService;
 import com.apnidukan.dto.ProductDTO;
-import com.apnidukan.entity.Product;
-import com.apnidukan.mapper.ProductMapper;
 import com.apnidukan.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
